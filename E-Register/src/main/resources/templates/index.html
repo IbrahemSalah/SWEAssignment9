@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Management</title>
+  <script>
+    async function saveStudent() {
+      const student = {
+        studentNumber: document.getElementById('saveStudentNumber').value,
+        firstName: document.getElementById('saveFirstName').value,
+        lastName: document.getElementById('saveLastName').value
+      };
+      await fetch('/students', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(student)
+      });
+      alert('Student saved!');
+    }
+
+    async function getAllStudents() {
+      const response = await fetch('/students');
+      const students = await response.json();
+      const list = document.getElementById('studentList');
+      list.innerHTML = '';
+      students.forEach(student => {
+        list.innerHTML += `<li>ID: ${student.id}, Student Number: ${student.studentNumber}, Name: ${student.firstName} ${student.lastName}</li>`;
+      });
+    }
+
+    async function updateStudent() {
+      const student = {
+        id: document.getElementById('updateStudentId').value,
+        studentNumber: document.getElementById('updateStudentNumber').value,
+        firstName: document.getElementById('updateFirstName').value,
+        lastName: document.getElementById('updateLastName').value
+      };
+      await fetch('/students', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(student)
+      });
+      alert('Student updated!');
+    }
+
+    async function deleteStudent() {
+      const student = {
+        id: document.getElementById('deleteStudentId').value
+      };
+      await fetch('/students', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(student)
+      });
+      alert('Student deleted!');
+    }
+  </script>
+</head>
+<body>
+<h1>Student Management</h1>
+
+<h2>Save Student</h2>
+<form onsubmit="event.preventDefault(); saveStudent();">
+  <label for="saveStudentNumber">Student Number:</label>
+  <input type="text" id="saveStudentNumber" required><br>
+  <label for="saveFirstName">First Name:</label>
+  <input type="text" id="saveFirstName" required><br>
+  <label for="saveLastName">Last Name:</label>
+  <input type="text" id="saveLastName" required><br>
+  <button type="submit">Save Student</button>
+</form>
+
+<h2>Get All Students</h2>
+<button onclick="getAllStudents()">Get All Students</button>
+<ul id="studentList"></ul>
+
+<h2>Update Student</h2>
+<form onsubmit="event.preventDefault(); updateStudent();">
+  <label for="updateStudentId">Student ID:</label>
+  <input type="number" id="updateStudentId" required><br>
+  <label for="updateStudentNumber">Student Number:</label>
+  <input type="text" id="updateStudentNumber" required><br>
+  <label for="updateFirstName">First Name:</label>
+  <input type="text" id="updateFirstName" required><br>
+  <label for="updateLastName">Last Name:</label>
+  <input type="text" id="updateLastName" required><br>
+  <button type="submit">Update Student</button>
+</form>
+
+<h2>Delete Student</h2>
+<form onsubmit="event.preventDefault(); deleteStudent();">
+  <label for="deleteStudentId">Student ID:</label>
+  <input type="number" id="deleteStudentId" required><br>
+  <button type="submit">Delete Student</button>
+</form>
+</body>
+</html>
